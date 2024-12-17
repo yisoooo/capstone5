@@ -4,7 +4,7 @@ require_once("db.php");
 
 // 로그인 상태 체크
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php"); // 로그인되어 있지 않으면 로그인 페이지로 리다이렉트
+    header("Location: login.php"); // 로그인되지 않은 경우 로그인 페이지로 이동
     exit();
 }
 
@@ -106,9 +106,12 @@ $stmt->close();
             font-size: 24px;
             color: #333;
         }
-        .stats div p {
-            color: #888;
-            margin: 5px 0 0;
+        .stats div a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .stats div a:hover {
+            text-decoration: underline;
         }
         .links {
             display: flex;
@@ -143,17 +146,12 @@ $stmt->close();
         footer div {
             margin: 5px 0;
         }
-        .login-section {
-            text-align: center;
+        #section-content {
             margin: 20px 0;
-        }
-        .login-section a {
-            text-decoration: none;
-            color: #007bff;
-            margin: 0 10px;
-        }
-        .login-section a:hover {
-            text-decoration: underline;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
         }
     </style>
 </head>
@@ -162,7 +160,7 @@ $stmt->close();
 <!-- 헤더 -->
 <header>
     <div class="logo"><a href="index1.php" style="text-decoration: none; color: inherit;">UCAR</a></div>
-    <div class="login-section">
+    <div>
         <a href="logout.php">로그아웃</a>
     </div>
 </header>
@@ -174,7 +172,7 @@ $stmt->close();
         <div class="user-info">
             <img src="https://via.placeholder.com/40" alt="프로필 이미지">
             <span><?php echo $user_name; ?></span>
-            <a href="edit_profile.php">회원정보 수정</a> <!-- 회원정보 수정 링크 추가 -->
+            <a href="edit_profile.php">회원정보 수정</a>
         </div>
         <div>
             목록 (최근 3개월 기준)
@@ -184,25 +182,30 @@ $stmt->close();
     <!-- 통계 섹션 -->
     <div class="stats">
         <div>
-            <h3>6</h3>
-            <a href="mypage1.php">찜한 차량</a>
+            <h3 id="favorites-count">0</h3>
+            <a href="#" onclick="loadSection('favorites'); return false;">찜한 차량</a>
         </div>
         <div>
-            <h3>21</h3>
-            <a href="mypage2.php">최근 본 차량</a>
+            <h3 id="recent-count">0</h3>
+            <a href="#" onclick="loadSection('recent'); return false;">최근 본 차량</a>
         </div>
         <div>
-            <h3>0</h3>
-            <a href="mypage3.php">판매중 차량</a>
+            <h3 id="selling-count">0</h3>
+            <a href="#" onclick="loadSection('selling'); return false;">판매중 차량</a>
         </div>
         <div>
-            <h3>0</h3>
-            <a href="mypage4.php">판매된 차량</a>
+            <h3 id="sold-count">0</h3>
+            <a href="#" onclick="loadSection('sold'); return false;">판매된 차량</a>
         </div>
         <div>
-            <h3>0</h3>
-            <a href="mypage5.php">구매문의 차량</a>
+            <h3 id="inquiry-count">0</h3>
+            <a href="#" onclick="loadSection('inquiry'); return false;">구매문의 차량</a>
         </div>
+    </div>
+
+    <!-- 동적 섹션 로드 -->
+    <div id="section-content">
+        <p>섹션을 선택하면 내용이 여기에 표시됩니다.</p>
     </div>
 
     <!-- 링크 섹션 -->
@@ -225,12 +228,30 @@ $stmt->close();
 
 <!-- 푸터 -->
 <footer>
-    <div>CUSTOMER CENTER: TEL 000-0000-0000</div>
+    <div>CUSTOMER CENTER TEL: 000-0000-0000</div>
     <div>BANK ACCOUNT: 0000000000</div>
     <div>RETURN/EXCHANGE: 서울특별시 강남구 테헤란로 000</div>
     <div>유카 (UCAR) TEL. 000 0000 0000 OWNER. NNN</div>
     <div>COPYRIGHT © 유카 주식회사. ALL RIGHTS RESERVED.</div>
 </footer>
 
+<script>
+    // AJAX를 통해 섹션 데이터를 가져와 표시하는 함수
+    function loadSection(section) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "fetch_section.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById("section-content").innerHTML = xhr.responseText;
+            }
+        };
+        xhr.send("section=" + section);
+    }
+
+    // 페이지 로드 시 기본 섹션 불러오기
+    window.onload = () => loadSection('favorites');
+</script>
 </body>
 </html>
