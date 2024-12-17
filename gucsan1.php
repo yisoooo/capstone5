@@ -188,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <label for="applicant-name">신청자명</label>
         <input type="text" id="applicant-name" name="applicant-name" placeholder="예) 홍길동" required>
-
+        
         <label for="phone-number">휴대전화번호</label>
         <input type="text" id="phone-number" name="phone-number" placeholder="예) 010-1234-5678" required>
 

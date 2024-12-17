@@ -115,6 +115,7 @@
       text-decoration: none;
       color: #007bff;
       font-size: 1em;
+      cursor: pointer;
     }
 
     .left-section ul li a:hover {
@@ -134,6 +135,7 @@
     /* 차량 목록 */
     .car-item {
       width: 200px;
+      height:300px;
       background-color: #e0e0e0;
       padding: 10px;
       text-align: center;
@@ -141,19 +143,42 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative; /* 하트 버튼 위치 조정을 위한 설정 */
     }
 
     .car-item img {
       width: 100%;
-      height: 150px;
+      height: 150px; /* 이미지 크기 줄임 */
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 10px;
     }
 
     .car-item p {
-      font-size: 1em;
+      font-size: 0.9em; /* 텍스트 크기 조정 */
       color: #333;
+      margin-bottom: 10px;
+    }
+
+    /* 하트 버튼 스타일 */
+    .heart-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5em;
+      color: #bbb; /* 기본 하트 색상 */
+      transition: color 0.3s ease;
+    }
+
+    .heart-button.liked {
+      color: #ff6b6b; /* 찜한 하트 색상 */
+    }
+
+    .heart-button:focus {
+      outline: none;
     }
 
     /* 푸터 */
@@ -194,57 +219,50 @@
     <aside class="left-section">
       <h3>카테고리</h3>
       <ul>
-        <li><a href="imported.php">수입차</a></li>
-        <li><a href="gucsanb.php">국산차</a></li>
-        <li><a href="electric.php">전기차</a></li>
-        <li><a href="suv.php">SUV</a></li>
-        <li><a href="sedan.php">세단</a></li>
+        <li><a data-category="imported">수입차</a></li>
+        <li><a data-category="domestic">국산차</a></li>
+        <li><a data-category="electric">전기차</a></li>
+        <li><a data-category="suv">SUV</a></li>
+        <li><a data-category="sedan">세단</a></li>
       </ul>
     </aside>
 
     <!-- 중앙 컨테이너 -->
-    <div class="container">
-      <!-- 차량 아이템 -->
-      <div class="car-item">
-        <img src="https://via.placeholder.com/200x150" alt="Car">
-        <p>차량 내용</p>
-      </div>
-      <div class="car-item">
-        <img src="https://via.placeholder.com/200x150" alt="Car">
-        <p>차량 내용</p>
-      </div>
-      <div class="car-item">
-        <img src="https://via.placeholder.com/200x150" alt="Car">
-        <p>차량 내용</p>
-      </div>
-      <div class="car-item">
-        <img src="https://via.placeholder.com/200x150" alt="Car">
-        <p>차량 내용</p>
-      </div>
-      <div class="car-item">
-        <img src="https://via.placeholder.com/200x150" alt="Car">
-        <p>차량 내용</p>
-      </div>
-      <div class="car-item">
-        <img src="https://via.placeholder.com/200x150" alt="Car">
-        <p>차량 내용</p>
-      </div>
-      <div class="car-item">
-        <img src="https://via.placeholder.com/200x150" alt="Car">
-        <p>차량 내용</p>
-      </div>
-      <div class="car-item">
-        <img src="https://via.placeholder.com/200x150" alt="Car">
-        <p>차량 내용</p>
-      </div>
-      <div class="car-item">
-        <img src="https://via.placeholder.com/200x150" alt="Car">
-        <p>차량 내용</p>
-      </div>
-      <div class="car-item">
-        <img src="https://via.placeholder.com/200x150" alt="Car">
-        <p>차량 내용</p>
-      </div>
+    <div class="container" id="car-list">
+      <?php
+      $servername = "localhost";
+      $username = "root"; // 데이터베이스 사용자명
+      $password = "";     // 데이터베이스 비밀번호
+      $dbname = "ucar";   // 데이터베이스 이름
+
+      // 데이터베이스 연결
+      $conn = new mysqli($servername, $username, $password, $dbname);
+
+      // 연결 확인
+      if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+      }
+
+      // 차량 데이터 가져오기
+      $sql = "SELECT * FROM cars";
+      $result = $conn->query($sql);
+
+      // 결과 출력
+      if ($result->num_rows > 0) {
+          while ($row = $result->fetch_assoc()) {
+              echo '<div class="car-item" data-category="' . htmlspecialchars($row['category']) . '">';
+              echo '<button class="heart-button" onclick="toggleLike(this)">&#9829;</button>';
+              echo '<img src="/' . htmlspecialchars($row['image_url']) . '" alt="Car">';
+              echo '<p>' . htmlspecialchars($row['description']) . '</p>';
+              echo '</div>';
+          }
+      } else {
+          echo "No cars found.";
+      }
+
+      // 연결 종료
+      $conn->close();
+      ?>
     </div>
   </div>
 
@@ -255,5 +273,32 @@
     <div>유카 (UCAR) TEL. 000 0000 0000 OWNER. NNN</div>
     <div>COPYRIGHT © 유카 주식회사 ALL RIGHTS RESERVED.</div>
   </footer>
+
+  <script>
+    // JavaScript로 탭 전환 처리
+    document.querySelectorAll('.left-section a').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault(); // 기본 동작 막기
+        const category = link.getAttribute('data-category');
+
+        // 모든 차량 숨기기
+        document.querySelectorAll('.car-item').forEach(item => {
+          if (item.getAttribute('data-category') === category) {
+            item.style.display = 'flex'; // 선택된 카테고리 보이기
+          } else {
+            item.style.display = 'none'; // 다른 카테고리 숨기기
+          }
+        });
+      });
+    });
+
+    // 찜 기능: 하트 버튼 상태 토글
+    function toggleLike(button) {
+      button.classList.toggle('liked'); // 'liked' 클래스 토글
+      const isLiked = button.classList.contains('liked');
+      console.log(isLiked ? "찜 추가" : "찜 해제");
+      // 서버와 연동하려면 AJAX 요청 등을 추가할 수 있음.
+    }
+  </script>
 </body>
 </html>

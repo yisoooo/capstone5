@@ -167,7 +167,7 @@
   <div class="main-visual">
     <h1>내차팔기</h1>
     <p>홍보 사진</p>
-    <a href="gucsan1.php" class="apply-button">간편신청 ></a>
+    <a href="sell_car.php" class="apply-button">간편신청 ></a>
   </div>
 
   <div class="recommend-section">
