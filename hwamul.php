@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ucar 중고차 목록</title>
+  <style>
+    /* 기본 스타일 */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    /* 상단 네비게이션 바 */
+    .top-bar {
+      background-color: #f0f0f0;
+      padding: 5px 20px;
+      font-size: 0.9em;
+      text-align: right;
+    }
+
+    .top-bar span {
+      margin-left: 20px;
+    }
+
+    .logo {
+            font-size: 40px;
+            font-weight: bold;
+            color: #333;
+        }
+
+    /* 메인 헤더 */
+    header {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar {
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+        }
+        .search-bar input {
+            border: none;
+            outline: none;
+            font-size: 15px;
+        }
+        .search-bar input::placeholder {
+            color: #676767;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #333;
+        }
+        nav a:hover {
+            color: #007bff;
+        }
+    /* 메인 메뉴 */
+    .main-menu {
+      display: flex;
+      justify-content: center;
+      background-color: #ffffff;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .main-menu a {
+      margin: 0 15px;
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .main-menu a:hover {
+      color: #000;
+    }
+
+    /* 컨테이너 */
+    .container {
+      display: flex;
+      padding: 20px;
+    }
+
+    /* 왼쪽 필터 패널 */
+    .filter-panel {
+      width: 250px;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      font-size: 0.9em;
+    }
+
+    .filter-panel h2 {
+      font-size: 1.2em;
+      color: red;
+    }
+
+    .filter-section {
+      margin-bottom: 15px;
+    }
+
+    .filter-section label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .filter-section input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    /* 차량 목록 */
+    .car-list {
+      flex-grow: 1;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .car-item {
+      background-color: #e0e0e0;
+      padding: 10px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    .car-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .car-item p {
+      font-size: 1em;
+      color: #333;
+    }
+
+    /* 푸터 */
+    footer {
+      font-size :12px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            position:fixed;
+            bottom : 0;
+            width:100%
+        }
+        footer div {
+            margin: 5px 0;
+        }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">UCAR</div>
+    <nav>
+        <a href="gucsan.php">내차팔기</a>
+      <a href="buycar.php">내차사기</a>
+      <a href="rentcar.php">렌트</a>
+      <a href="finance.php">금융</a>
+      <a href="media.php">미디어</a>
+    </nav>
+    <div class="search-bar">
+        <input type="text" placeholder="검색">
+    </div>
+</header>
+  <!-- 컨테이너 -->
+  <div class="container">
+    <!-- 왼쪽 필터 패널 -->
+    <div class="filter-panel">
+      <h2>전기차 검색</h2>
+      <div class="filter-section">
+        <label>차종</label>
+        <input type="checkbox"> 옵션1<br>
+        <input type="checkbox"> 옵션2
+      </div>
+      <div class="filter-section">
+        <label>제조사/모델/등급</label>
+        <input type="checkbox"> 옵션1<br>
+        <input type="checkbox"> 옵션2
+      </div>
+      <div class="filter-section">
+        <label>연식</label>
+        <input type="checkbox"> 옵션1<br>
+        <input type="checkbox"> 옵션2
+      </div>
+      <div class="filter-section">
+        <label>주행거리</label>
+        <input type="checkbox"> 옵션1<br>
+        <input type="checkbox"> 옵션2
+      </div>
+      <div class="filter-section">
+        <label>가격</label>
+        <input type="checkbox"> 옵션1<br>
+        <input type="checkbox"> 옵션2
+      </div>
+      <!-- 추가 필터들 -->
+    </div>
+
+    <!-- 차량 목록 -->
+    <div class="car-list">
+      <div class="car-item">
+        <img src="https://via.placeholder.com/200x150" alt="Car">
+        <p>차량 내용</p>
+      </div>
+      <div class="car-item">
+        <img src="https://via.placeholder.com/200x150" alt="Car">
+        <p>차량 내용</p>
+      </div>
+      <div class="car-item">
+        <img src="https://via.placeholder.com/200x150" alt="Car">
+        <p>차량 내용</p>
+      </div>
+      <div class="car-item">
+        <img src="https://via.placeholder.com/200x150" alt="Car">
+        <p>차량 내용</p>
+      </div>
+      <div class="car-item">
+        <img src="https://via.placeholder.com/200x150" alt="Car">
+        <p>차량 내용</p>
+      </div>
+      <div class="car-item">
+        <img src="https://via.placeholder.com/200x150" alt="Car">
+        <p>차량 내용</p>
+      </div>
+      <div class="car-item">
+        <img src="https://via.placeholder.com/200x150" alt="Car">
+        <p>차량 내용</p>
+      </div>
+      <div class="car-item">
+        <img src="https://via.placeholder.com/200x150" alt="Car">
+        <p>차량 내용</p>
+      </div>
+      <!-- 더 많은 차량들 -->
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div>CUSTOMER CENTER TEL 000 0000 0000</div>
+    <div>BANK ACCOUNT DD은행 000000000</div>
+    <div>RETURN / EXCHANGE 서울특별시 강남구 테헤란로 0000</div>
+    <div>유카 (UCAR) TEL. 000 0000 0000 OWNER. NNN</div>
+    <div>COPYRIGHT © 유카 주식회사 ALL RIGHTS RESERVED.</div>
+  </footer>
+
+</body>
+</html>
