@@ -250,8 +250,14 @@
       // 결과 출력
       if ($result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
-              echo '<div class="car-item" data-category="' . htmlspecialchars($row['category']) . '">';
-              echo '<button class="heart-button" onclick="toggleLike(this)">&#9829;</button>';
+              // 각 차량에 찜 상태 추가
+              $car_id = htmlspecialchars($row['id']);
+              $liked_sql = "SELECT * FROM likes WHERE car_id = $car_id";
+              $liked_result = $conn->query($liked_sql);
+              $is_liked = $liked_result->num_rows > 0 ? 'liked' : ''; // 찜한 상태일 경우 'liked' 클래스 추가
+
+              echo '<div class="car-item" data-category="' . htmlspecialchars($row['category']) . '" data-id="' . $car_id . '">';
+              echo '<button class="heart-button ' . $is_liked . '" onclick="toggleLike(this)">&#9829;</button>';
               echo '<img src="/' . htmlspecialchars($row['image_url']) . '" alt="Car">';
               echo '<p>' . htmlspecialchars($row['description']) . '</p>';
               echo '</div>';
@@ -275,29 +281,23 @@
   </footer>
 
   <script>
-    // JavaScript로 탭 전환 처리
-    document.querySelectorAll('.left-section a').forEach(link => {
-      link.addEventListener('click', event => {
-        event.preventDefault(); // 기본 동작 막기
-        const category = link.getAttribute('data-category');
-
-        // 모든 차량 숨기기
-        document.querySelectorAll('.car-item').forEach(item => {
-          if (item.getAttribute('data-category') === category) {
-            item.style.display = 'flex'; // 선택된 카테고리 보이기
-          } else {
-            item.style.display = 'none'; // 다른 카테고리 숨기기
-          }
-        });
-      });
-    });
-
     // 찜 기능: 하트 버튼 상태 토글
     function toggleLike(button) {
       button.classList.toggle('liked'); // 'liked' 클래스 토글
       const isLiked = button.classList.contains('liked');
-      console.log(isLiked ? "찜 추가" : "찜 해제");
-      // 서버와 연동하려면 AJAX 요청 등을 추가할 수 있음.
+      
+      // 하트 클릭 시, 서버에 AJAX 요청으로 찜 상태 전송
+      const carId = button.closest('.car-item').getAttribute('data-id'); // 각 차량에 대한 ID
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'like_car.php', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          console.log(isLiked ? "찜 추가" : "찜 해제");
+        }
+      };
+      xhr.send('car_id=' + carId + '&liked=' + isLiked); // car_id와 liked 상태 전달
     }
   </script>
 </body>

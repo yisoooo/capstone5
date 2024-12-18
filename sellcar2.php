@@ -185,7 +185,7 @@ $conn->close();
 
     <!-- 버튼 -->
     <div class="buttons">
-      <button onclick="window.location.href='index.php'">메인으로 돌아가기</button>
+      <button onclick="window.location.href='index1.php'">메인으로 돌아가기</button>
       <button onclick="window.location.href='sell_car.php'">다른 차량 등록</button>
     </div>
   </div>

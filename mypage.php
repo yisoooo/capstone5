@@ -181,27 +181,33 @@ $stmt->close();
 
     <!-- 통계 섹션 -->
     <div class="stats">
-        <div>
-            <h3 id="favorites-count">0</h3>
-            <a href="#" onclick="loadSection('favorites'); return false;">찜한 차량</a>
-        </div>
-        <div>
-            <h3 id="recent-count">0</h3>
-            <a href="#" onclick="loadSection('recent'); return false;">최근 본 차량</a>
-        </div>
-        <div>
-            <h3 id="selling-count">0</h3>
-            <a href="#" onclick="loadSection('selling'); return false;">판매중 차량</a>
-        </div>
-        <div>
-            <h3 id="sold-count">0</h3>
-            <a href="#" onclick="loadSection('sold'); return false;">판매된 차량</a>
-        </div>
-        <div>
-            <h3 id="inquiry-count">0</h3>
-            <a href="#" onclick="loadSection('inquiry'); return false;">구매문의 차량</a>
-        </div>
+    <div>
+        <h3 id="favorites-count">0</h3>
+        <a href="#" onclick="loadSection('likes'); return false;">찜한 차량</a>
     </div>
+    <div>
+        <h3 id="recent-count">0</h3>
+        <a href="#" onclick="loadSection('recent'); return false;">최근 본 차량</a>
+    </div>
+    <div>
+        <h3 id="selling-count">0</h3>
+        <a href="#" onclick="loadSection('selling'); return false;">판매중 차량</a>
+    </div>
+    <div>
+        <h3 id="sold-count">0</h3>
+        <a href="#" onclick="loadSection('sold'); return false;">판매된 차량</a>
+    </div>
+    <div>
+        <h3 id="inquiry-count">0</h3>
+        <a href="#" onclick="loadSection('inquiry'); return false;">구매문의 차량</a>
+    </div>
+</div>
+
+<!-- 동적 섹션 로드 -->
+<div id="section-content">
+    <p>섹션을 선택하면 내용이 여기에 표시됩니다.</p>
+</div>
+
 
     <!-- 동적 섹션 로드 -->
     <div id="section-content">
